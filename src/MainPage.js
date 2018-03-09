@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import BookShelf from "./BookShelf";
 import { Link } from "react-router-dom";
-import { getAll } from "./BooksAPI";
+import { getAll, update } from "./BooksAPI";
 
 class MainPage extends Component {
   state = {
@@ -17,6 +17,7 @@ class MainPage extends Component {
     const books = this.state.books.slice();
     books[bookIndex] = updatedBook;
 
+    update(updatedBook, updatedBook.shelf);
     this.setState({ books });
   };
 
