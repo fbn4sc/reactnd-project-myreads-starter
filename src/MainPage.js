@@ -12,6 +12,14 @@ class MainPage extends Component {
     getAll().then(books => this.setState({ books }));
   }
 
+  updateBook = updatedBook => {
+    const bookIndex = this.state.books.findIndex(b => b.id === updatedBook.id);
+    const books = this.state.books.slice();
+    books[bookIndex] = updatedBook;
+
+    this.setState({ books });
+  };
+
   render() {
     return (
       <div className="list-books">
@@ -25,14 +33,17 @@ class MainPage extends Component {
               books={this.state.books.filter(
                 b => b.shelf === "currentlyReading"
               )}
+              handleBookUpdate={this.updateBook}
             />
             <BookShelf
               shelfTitle="Want to Read"
               books={this.state.books.filter(b => b.shelf === "wantToRead")}
+              handleBookUpdate={this.updateBook}
             />
             <BookShelf
               shelfTitle="Read"
               books={this.state.books.filter(b => b.shelf === "read")}
+              handleBookUpdate={this.updateBook}
             />
           </div>
         </div>
