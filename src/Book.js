@@ -1,6 +1,11 @@
 import React from "react";
 
 const Book = props => {
+  const dynamicStyle = {};
+  if (props.book.imageLinks)
+    dynamicStyle.backgroundImage = `url(${props.book.imageLinks.thumbnail})`;
+  else dynamicStyle.background = "#cccccc88";
+
   return (
     <div className="book">
       <div className="book-top">
@@ -9,7 +14,7 @@ const Book = props => {
           style={{
             width: 128,
             height: 193,
-            backgroundImage: `url(${props.book.imageLinks.thumbnail})`
+            ...dynamicStyle
           }}
         />
         <div className="book-shelf-changer">
@@ -33,7 +38,8 @@ const Book = props => {
       </div>
       <div className="book-title">{props.book.title}</div>
       <div className="book-authors">
-        {props.book.authors.map((a, i) => <div key={i}>{a}</div>)}
+        {props.book.authors &&
+          props.book.authors.map((a, i) => <div key={i}>{a}</div>)}
       </div>
     </div>
   );
