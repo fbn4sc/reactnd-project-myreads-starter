@@ -1,26 +1,8 @@
 import React, { Component } from "react";
 import BookShelf from "./BookShelf";
 import { Link } from "react-router-dom";
-import { getAll, update } from "./BooksAPI";
 
 class MainPage extends Component {
-  state = {
-    books: []
-  };
-
-  componentDidMount() {
-    getAll().then(books => this.setState({ books }));
-  }
-
-  updateBook = updatedBook => {
-    const bookIndex = this.state.books.findIndex(b => b.id === updatedBook.id);
-    const books = this.state.books.slice();
-    books[bookIndex] = updatedBook;
-
-    update(updatedBook, updatedBook.shelf);
-    this.setState({ books });
-  };
-
   render() {
     return (
       <div className="list-books">
@@ -31,20 +13,20 @@ class MainPage extends Component {
           <div>
             <BookShelf
               shelfTitle="Currently Reading"
-              books={this.state.books.filter(
+              books={this.props.books.filter(
                 b => b.shelf === "currentlyReading"
               )}
-              handleBookUpdate={this.updateBook}
+              handleBookUpdate={this.props.handleBookUpdate}
             />
             <BookShelf
               shelfTitle="Want to Read"
-              books={this.state.books.filter(b => b.shelf === "wantToRead")}
-              handleBookUpdate={this.updateBook}
+              books={this.props.books.filter(b => b.shelf === "wantToRead")}
+              handleBookUpdate={this.props.handleBookUpdate}
             />
             <BookShelf
               shelfTitle="Read"
-              books={this.state.books.filter(b => b.shelf === "read")}
-              handleBookUpdate={this.updateBook}
+              books={this.props.books.filter(b => b.shelf === "read")}
+              handleBookUpdate={this.props.handleBookUpdate}
             />
           </div>
         </div>

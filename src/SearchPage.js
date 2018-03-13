@@ -63,7 +63,7 @@ class SearchPage extends Component {
               <li key={i}>
                 <Book
                   book={book}
-                  handleBookUpdate={book => console.log(book)}
+                  handleBookUpdate={this.props.handleBookUpdate}
                 />
               </li>
             ))}
