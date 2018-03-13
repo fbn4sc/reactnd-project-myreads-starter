@@ -4,18 +4,42 @@ import { search } from "./BooksAPI";
 import Book from "./Book";
 
 class SearchPage extends Component {
-  state = { searchTerm: "", books: [] };
+  state = { searchTerm: "", searchedBooks: [] };
+
+  compareAndUpdateResults = fetchedBooks => {
+    for (let b of this.props.books) {
+      fetchedBooks.map((fb, i) => {
+        if (fb.id === b.id) {
+          fb.shelf = b.shelf;
+          fetchedBooks[i] = fb;
+        }
+      });
+    }
+
+    fetchedBooks = fetchedBooks.map(fb => {
+      if (!fb.shelf) fb.shelf = "none";
+      return fb;
+    });
+
+    return fetchedBooks;
+  };
 
   handleSearch = e => {
     const searchTerm = e.target.value;
 
     if (searchTerm)
-      search(searchTerm).then(result => {
-        if (result.error)
-          this.setState({ books: [], error: "No books match your query." });
-        else this.setState({ books: result });
+      search(searchTerm).then(results => {
+        if (results.error)
+          this.setState({
+            searchedBooks: [],
+            error: "No books match your query."
+          });
+        else
+          this.setState({
+            searchedBooks: this.compareAndUpdateResults(results)
+          });
       });
-    else this.setState({ books: [], error: "" });
+    else this.setState({ searchedBooks: [], error: "" });
   };
 
   render() {
@@ -35,9 +59,12 @@ class SearchPage extends Component {
         </div>
         <div className="search-books-results">
           <ol className="books-grid">
-            {this.state.books.map((book, i) => (
+            {this.state.searchedBooks.map((book, i) => (
               <li key={i}>
-                <Book book={book} />
+                <Book
+                  book={book}
+                  handleBookUpdate={book => console.log(book)}
+                />
               </li>
             ))}
           </ol>
